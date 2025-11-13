@@ -852,8 +852,15 @@ def main():
         return
     
     # 正常运行主程序
+    root = tk.Tk()
+    
     # 启用高DPI支持（必须在创建窗口之前调用）
     scale_factor = 1.0
+    
+    # 检测操作系统类型
+    import platform
+    system = platform.system()
+    
     try:
         from ctypes import windll
         # 尝试使用 Windows 10/11 的 DPI 感知 API
@@ -874,12 +881,15 @@ def main():
             windll.user32.SetProcessDPIAware()
         except:
             pass
-    
-    root = tk.Tk()
-    
+
     # 根据缩放比例调整窗口大小
     base_width = 600
     base_height = 530
+    
+    # 对于 macOS，调整基础尺寸
+    if system == "Darwin":
+        base_height = 600  # macOS 需要更大的高度
+    
     scaled_width = int(base_width * scale_factor)
     scaled_height = int(base_height * scale_factor)
     root.geometry(f"{scaled_width}x{scaled_height}")
