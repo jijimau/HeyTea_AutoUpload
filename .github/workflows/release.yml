@@ -1,0 +1,79 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*'  # 当推送 v* 标签时触发（例如 v1.0.0）
+
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pyinstaller
+    
+    - name: Build executable
+      run: |
+        pyinstaller --onefile --windowed --name="喜茶杯贴上传工具" --icon=NONE main.py
+    
+    - name: Get version from tag
+      id: get_version
+      run: |
+        $version = "${{ github.ref_name }}"
+        echo "VERSION=$version" >> $env:GITHUB_OUTPUT
+      shell: pwsh
+    
+    - name: Rename executable
+      run: |
+        $version = "${{ steps.get_version.outputs.VERSION }}"
+        Move-Item -Path "dist/喜茶杯贴上传工具.exe" -Destination "dist/喜茶杯贴上传工具-$version.exe"
+      shell: pwsh
+    
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          dist/喜茶杯贴上传工具-*.exe
+        body: |
+          ## 喜茶杯贴上传工具 ${{ steps.get_version.outputs.VERSION }}
+          
+          ### 功能特性
+          - ✅ 短信验证码登录（支持腾讯验证码）
+          - ✅ Token直接登录
+          - ✅ 验证码发送冷却（120秒）
+          - ✅ 记住登录信息
+          - ✅ 退出登录功能
+          - ✅ 图片选择与预览
+          - ✅ 图片尺寸验证（596x832）
+          - ✅ 仅支持PNG格式
+          - ✅ 图片上传到喜茶服务器
+          
+          ### 使用说明
+          1. 下载 `喜茶杯贴上传工具-${{ steps.get_version.outputs.VERSION }}.exe`
+          2. 双击运行
+          3. 使用手机号登录或Token登录
+          4. 选择596x832尺寸的PNG图片
+          5. 上传到喜茶服务器
+          
+          ### 系统要求
+          - Windows 10/11
+          - 网络连接
+          
+          ---
+          **完整源代码**: [GitHub Repository](https://github.com/${{ github.repository }})
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
