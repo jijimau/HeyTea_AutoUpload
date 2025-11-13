@@ -29,7 +29,7 @@ jobs:
     
     - name: Build executable
       run: |
-        pyinstaller --onefile --windowed --name="喜茶杯贴上传工具" --icon=NONE main.py
+        pyinstaller --onefile --windowed --name="HeyTea-Uploader" --icon=NONE main.py
     
     - name: Get version from tag
       id: get_version
@@ -41,14 +41,14 @@ jobs:
     - name: Rename executable
       run: |
         $version = "${{ steps.get_version.outputs.VERSION }}"
-        Move-Item -Path "dist/喜茶杯贴上传工具.exe" -Destination "dist/喜茶杯贴上传工具-$version.exe"
+        Move-Item -Path "dist/HeyTea-Uploader.exe" -Destination "dist/HeyTea-Uploader-$version.exe"
       shell: pwsh
     
     - name: Create Release
       uses: softprops/action-gh-release@v1
       with:
         files: |
-          dist/喜茶杯贴上传工具-*.exe
+          dist/HeyTea-Uploader-*.exe
         body: |
           ## 喜茶杯贴上传工具 ${{ steps.get_version.outputs.VERSION }}
           
@@ -59,7 +59,7 @@ jobs:
           - ✅ 直接上传图片到喜茶服务器
           
           ### 使用说明
-          1. 下载 `喜茶杯贴上传工具-${{ steps.get_version.outputs.VERSION }}.exe`
+          1. 下载 `HeyTea-Uploader-${{ steps.get_version.outputs.VERSION }}.exe`
           2. 双击运行
           3. 使用手机号登录或Token登录
           4. 选择596x832尺寸的PNG图片
@@ -68,6 +68,9 @@ jobs:
           ### 系统要求
           - Windows 10/11（其他平台请从源码运行）
           - 网络连接
+          
+          ---
+          **完整源代码**: [GitHub Repository](https://github.com/${{ github.repository }})
           
         draft: false
         prerelease: false
