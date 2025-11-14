@@ -10,7 +10,18 @@ permissions:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: windows-latest
+            platform: windows
+            artifact_name: HeyTea-Uploader.exe
+            asset_name: HeyTea-Uploader-${{ github.ref_name }}-windows.exe
+          - os: macos-latest
+            platform: macos
+            artifact_name: 喜茶杯贴上传工具.app
+            asset_name: HeyTea-Uploader-${{ github.ref_name }}-macos.dmg
     
     steps:
     - name: Checkout code
@@ -24,9 +35,14 @@ jobs:
     - name: Get version from tag
       id: get_version
       run: |
-        $version = "${{ github.ref_name }}"
-        echo "VERSION=$version" >> $env:GITHUB_OUTPUT
-      shell: pwsh
+        if [ "${{ matrix.platform }}" = "windows" ]; then
+          version="${{ github.ref_name }}"
+          echo "VERSION=$version" >> $GITHUB_OUTPUT
+        else
+          version="${{ github.ref_name }}"
+          echo "VERSION=$version" >> $GITHUB_OUTPUT
+        fi
+      shell: bash
     
     - name: Install dependencies
       run: |
@@ -34,23 +50,74 @@ jobs:
         pip install -r requirements.txt
         pip install pyinstaller
     
-    - name: Build executable
+    - name: Build Windows executable
+      if: matrix.platform == 'windows'
       run: |
         $env:APP_VERSION = "${{ steps.get_version.outputs.VERSION }}"
         pyinstaller --onefile --windowed --name="HeyTea-Uploader" --icon=NONE main.py
       shell: pwsh
     
-    - name: Rename executable
+    - name: Build macOS app
+      if: matrix.platform == 'macos'
+      run: |
+        export APP_VERSION="${{ steps.get_version.outputs.VERSION }}"
+        pyinstaller --onedir --windowed --name="喜茶杯贴上传工具" main.py
+        
+        # 创建 DMG
+        APP_NAME="喜茶杯贴上传工具"
+        DMG_NAME="HeyTea-Uploader-${{ steps.get_version.outputs.VERSION }}-macos.dmg"
+        DMG_TEMP="${APP_NAME}_temp"
+        
+        mkdir "$DMG_TEMP"
+        cp -R "dist/${APP_NAME}.app" "$DMG_TEMP/"
+        ln -s /Applications "$DMG_TEMP/Applications"
+        hdiutil create -volname "$APP_NAME" -srcfolder "$DMG_TEMP" -ov -format UDZO "$DMG_NAME"
+        rm -rf "$DMG_TEMP"
+        mv "$DMG_NAME" dist/
+      shell: bash
+    
+    - name: Rename Windows executable
+      if: matrix.platform == 'windows'
       run: |
         $version = "${{ steps.get_version.outputs.VERSION }}"
-        Move-Item -Path "dist/HeyTea-Uploader.exe" -Destination "dist/HeyTea-Uploader-$version.exe"
+        Move-Item -Path "dist/HeyTea-Uploader.exe" -Destination "dist/HeyTea-Uploader-$version-windows.exe"
       shell: pwsh
+    
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ matrix.platform }}-build
+        path: |
+          dist/HeyTea-Uploader-*-${{ matrix.platform }}.*
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Download all artifacts
+      uses: actions/download-artifact@v4
+      with:
+        path: artifacts
+    
+    - name: Display structure of downloaded files
+      run: ls -R artifacts/
+    
+    - name: Get version from tag
+      id: get_version
+      run: |
+        version="${{ github.ref_name }}"
+        echo "VERSION=$version" >> $GITHUB_OUTPUT
     
     - name: Create Release
       uses: softprops/action-gh-release@v1
       with:
         files: |
-          dist/HeyTea-Uploader-*.exe
+          artifacts/windows-build/dist/HeyTea-Uploader-*-windows.exe
+          artifacts/macos-build/dist/HeyTea-Uploader-*-macos.dmg
         body: |
           ## 喜茶杯贴上传工具 ${{ steps.get_version.outputs.VERSION }}
           
@@ -59,17 +126,31 @@ jobs:
           - ✅ Token直接登录
           - ✅ 图片选择与预览
           - ✅ 直接上传图片到喜茶服务器
+          - ✅ 人机验证自动处理
+          
+          ### 下载说明
+          
+          #### Windows 用户
+          - 📥 下载 `HeyTea-Uploader-${{ steps.get_version.outputs.VERSION }}-windows.exe`
+          - 双击运行即可
+          - 系统要求：Windows 10/11
+          
+          #### macOS 用户  
+          - 📥 下载 `HeyTea-Uploader-${{ steps.get_version.outputs.VERSION }}-macos.dmg`
+          - 双击 DMG 文件，将应用拖拽到 Applications 文件夹
+          - 首次运行可能需要在"系统偏好设置" → "安全性与隐私"中允许运行
+          - 系统要求：macOS 10.13 或更高版本
           
           ### 使用说明
-          1. 下载 `HeyTea-Uploader-${{ steps.get_version.outputs.VERSION }}.exe`
-          2. 双击运行
-          3. 使用手机号登录或Token登录
-          4. 选择596x832尺寸的PNG图片
-          5. 上传到喜茶服务器
+          1. 使用手机号登录或Token登录
+          2. 选择596x832尺寸的PNG图片
+          3. 上传到喜茶服务器
+          4. 如遇人机验证，会自动弹出验证窗口
           
-          ### 系统要求
-          - Windows 10/11（其他平台请从源码运行）
-          - 网络连接
+          ### 注意事项
+          - 需要网络连接
+          - macOS 版本已修复验证码窗口参数传递问题
+          - 如有问题请在 [Issues](https://github.com/${{ github.repository }}/issues) 中反馈
           
           ---
           **完整源代码**: [GitHub Repository](https://github.com/${{ github.repository }})
