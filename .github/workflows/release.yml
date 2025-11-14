@@ -61,7 +61,23 @@ jobs:
       if: matrix.platform == 'macos'
       run: |
         export APP_VERSION="${{ steps.get_version.outputs.VERSION }}"
-        pyinstaller --onedir --windowed --name="喜茶杯贴上传工具" main.py
+        
+        # 设置环境变量以支持通用二进制
+        export ARCHFLAGS="-arch x86_64 -arch arm64"
+        export _PYTHON_HOST_PLATFORM="macosx-10.9-universal2"
+        
+        # 安装 universal2 版本的依赖（如果需要）
+        pip install --upgrade pip
+        
+        # 构建通用二进制应用
+        pyinstaller --onedir --windowed --name="喜茶杯贴上传工具" \
+          --target-arch=universal2 \
+          --osx-bundle-identifier=com.heytea.upload.tool \
+          main.py
+        
+        # 验证架构
+        echo "检查应用架构:"
+        file "dist/喜茶杯贴上传工具.app/Contents/MacOS/喜茶杯贴上传工具"
         
         # 创建 DMG
         APP_NAME="喜茶杯贴上传工具"
@@ -144,8 +160,9 @@ jobs:
           #### macOS 用户  
           - 📥 下载 `HeyTea-Uploader-${{ steps.get_version.outputs.VERSION }}-macos.dmg`
           - 双击 DMG 文件，将应用拖拽到 Applications 文件夹
+          - **支持架构**: Intel Mac (x86_64) 和 Apple Silicon (ARM64) 通用二进制
           - 首次运行可能需要在"系统偏好设置" → "安全性与隐私"中允许运行
-          - 系统要求：macOS 10.13 或更高版本
+          - 系统要求：macOS 10.9 或更高版本
           
           ### 使用说明
           1. 使用手机号登录或Token登录
@@ -155,6 +172,7 @@ jobs:
           
           ### 注意事项
           - 需要网络连接
+          - macOS 版本支持 Intel 和 Apple Silicon 双架构
           - macOS 版本已修复验证码窗口参数传递问题
           - 如有问题请在 [Issues](https://github.com/${{ github.repository }}/issues) 中反馈
           
