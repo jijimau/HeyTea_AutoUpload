@@ -87,8 +87,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: ${{ matrix.platform }}-build
-        path: |
-          dist/HeyTea-Uploader-*-${{ matrix.platform }}.*
+        path: dist/
 
   release:
     needs: build
@@ -106,6 +105,13 @@ jobs:
     - name: Display structure of downloaded files
       run: ls -R artifacts/
     
+    - name: Prepare files for release
+      run: |
+        # 将所有文件移动到根目录以便于访问
+        find artifacts/ -name "*.exe" -exec mv {} . \;
+        find artifacts/ -name "*.dmg" -exec mv {} . \;
+        ls -la *.exe *.dmg || echo "Some files might not exist"
+    
     - name: Get version from tag
       id: get_version
       run: |
@@ -116,8 +122,8 @@ jobs:
       uses: softprops/action-gh-release@v1
       with:
         files: |
-          artifacts/windows-build/dist/HeyTea-Uploader-*-windows.exe
-          artifacts/macos-build/dist/HeyTea-Uploader-*-macos.dmg
+          HeyTea-Uploader-*-windows.exe
+          HeyTea-Uploader-*-macos.dmg
         body: |
           ## 喜茶杯贴上传工具 ${{ steps.get_version.outputs.VERSION }}
           
