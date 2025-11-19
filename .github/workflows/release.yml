@@ -44,6 +44,11 @@ jobs:
         fi
       shell: bash
     
+    - name: Generate version file
+      run: |
+        echo "__version__ = '${{ steps.get_version.outputs.VERSION }}'" > _version.py
+      shell: bash
+    
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip

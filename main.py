@@ -12,12 +12,14 @@ import os
 import sys
 import subprocess
 
-# 版本号：从环境变量读取（打包时注入），否则显示git commit hash
+# 版本号：尝试从 _version.py 导入（打包时生成），否则显示git commit hash
 def get_version():
-    # 优先使用环境变量（打包时注入）
-    version = os.environ.get('APP_VERSION')
-    if version:
-        return version
+    # 优先从 _version.py 导入（打包时生成）
+    try:
+        from _version import __version__
+        return __version__
+    except ImportError:
+        pass
     
     # 开发环境：尝试获取git commit hash
     try:
@@ -826,7 +828,7 @@ class HeyTeaUploader:
                 'height': '832'
             }
 
-            header = HEYTEA_HEADER.copy()
+            header = HEYTEA_UPLOAD_HEADER.copy()
             header["Authorization"] = f"Bearer {self.token}"
             # 移除Content-Type，让requests自动设置multipart/form-data
             if 'Content-Type' in header:
